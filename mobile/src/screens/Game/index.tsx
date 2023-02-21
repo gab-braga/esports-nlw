@@ -10,6 +10,8 @@ import { GameParams } from '../../@types/@navigation';
 import { THEME } from '../../theme';
 import { Head } from '../../components/Head';
 import { DuoCard, DuoCardProps } from '../../components/DuoCard';
+import { DuoMatch } from '../../components/DuoMatch';
+import axios from 'axios';
 
 export function Game() {
   const route = useRoute();
@@ -21,12 +23,19 @@ export function Game() {
     navigation.goBack();
   }
 
+  async function getDiscordUser(adsId: string) {
+    axios.get(`http://192.168.0.3:3000/ads/${adsId}/discord`)
+      .then(response => {
+        return setDiscordDuoSelected(response.data.discord)
+      })
+  }
+
   const [ads, setAds] = useState<DuoCardProps[]>([]);
+  const [discordDuoSelected, setDiscordDuoSelected] = useState<string>('');
 
   useEffect(() => {
-    fetch(`http://192.168.0.2:3000/games/${game.id}/ads`)
-      .then(response => response.json())
-      .then(data => setAds(data))
+    axios.get(`http://192.168.0.3:3000/games/${game.id}/ads`)
+      .then(response => setAds(response.data))
   }, [])
 
   return (
@@ -46,7 +55,7 @@ export function Game() {
         <Head title={game.title} subtitle="Conecte-se e comece a jogar!"></Head>
 
         <FlatList data={ads} keyExtractor={item => item.id} renderItem={({ item }) => (
-          <DuoCard data={item} onConnect={() => {}} />
+          <DuoCard data={item} onConnect={() => getDiscordUser(item.id)} />
         )}
           horizontal contentContainerStyle={styles.contentList}
           showsHorizontalScrollIndicator={false}
@@ -55,6 +64,8 @@ export function Game() {
             <Text style={styles.emptyListText}>Não há anúncios publicados ainda.</Text>
           )}
         />
+
+        <DuoMatch onClose={() => setDiscordDuoSelected('')} visible={discordDuoSelected.length > 0} discord={discordDuoSelected} />
       </SafeAreaView>
     </Background>
   );

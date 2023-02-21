@@ -8,6 +8,7 @@ import { GameCard, GameCardProps } from '../../components/GameCard';
 import { useEffect, useState } from 'react';
 import { Background } from '../../components/Background';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 export function Home() {
 
@@ -20,9 +21,8 @@ export function Home() {
   }
 
   useEffect(() => {
-    fetch("http://192.168.0.2:3000/games")
-      .then(response => response.json())
-      .then(data => setGames(data))
+    axios.get("http://192.168.0.3:3000/games")
+      .then(response => setGames(response.data))
   }, [])
 
   return (
