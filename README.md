@@ -1,5 +1,9 @@
 # eSports (NLW)
 
+## Next Level Week
+A NLW (Next Level Week) é um evento online de programação criada pela Rocketseat. Uma semana com conteúdos em vídeos, desafios, feedbacks e um projeto inteiro e do zero desenvolvido durante essa semana.
+eSports é um aplicativo desenvolvido na edição da Rocketseat Next Level Week.
+
 ## Tecnologias
 ### Server
 * Express
